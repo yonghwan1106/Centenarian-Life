@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_option('deprecation.showPyplotGlobalUse', False)
 from typing import TypedDict, NotRequired
 from datetime import datetime, timedelta
 import pandas as pd
