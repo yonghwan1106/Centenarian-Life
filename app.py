@@ -1,9 +1,23 @@
 import streamlit as st
-st.set_option('deprecation.showPyplotGlobalUse', False)
+from database import init_db, get_checklist_items, add_checklist_item, remove_checklist_item, save_daily_progress, get_daily_progress, get_progress_history, save_notification, get_notifications, remove_notification
+from auth import register_user, authenticate_user
 from typing import TypedDict, NotRequired
 from datetime import datetime, timedelta
 import pandas as pd
 import plotly.express as px
+
+
+# 데이터베이스 초기화
+init_db()
+
+# 메인 앱 로직
+def main():
+    # 여기에 메인 앱 코드 작성
+    pass
+
+if __name__ == "__main__":
+    main()
+
 
 class ReflectionData(TypedDict):
     date: str
