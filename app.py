@@ -1,7 +1,7 @@
 import streamlit as st
-from database import init_db, get_checklist_items, add_checklist_item, remove_checklist_item, save_daily_progress, get_daily_progress, get_progress_history, save_notification, get_notifications, remove_notification
+from database import init_db, get_checklist_items, add_checklist_item, remove_checklist_item, save_daily_progress, get_daily_progress, get_progress_history, save_notification, get_notifications, remove_notification, save_reflection, get_recent_reflection
 from auth import register_user, authenticate_user
-from typing import TypedDict, NotRequired
+from typing import TypedDict, NotRequired, List
 from datetime import datetime, timedelta
 import pandas as pd
 import plotly.express as px
@@ -29,15 +29,13 @@ def login_page():
         if st.button("로그인"):
             if authenticate_user(username, password):
                 st.session_state.username = username
-                st.success("로그인 성공!")
                 st.session_state.page = "main"
-                st.experimental_rerun()
+                st.success("로그인 성공!")
             else:
                 st.error("잘못된 사용자 이름 또는 비밀번호입니다.")
     with col2:
         if st.button("회원가입"):
             st.session_state.page = "register"
-            st.experimental_rerun()
 
 def register_page():
     st.title("회원가입")
@@ -52,12 +50,10 @@ def register_page():
             if success:
                 st.success(message)
                 st.session_state.page = "login"
-                st.experimental_rerun()
             else:
                 st.error(message)
     if st.button("로그인 페이지로 돌아가기"):
         st.session_state.page = "login"
-        st.experimental_rerun()
 
 def main_screen():
     st.set_page_config(page_title="50+ 일일 웰니스 대시보드", layout="wide")
@@ -159,40 +155,37 @@ def display_quick_links():
     
     if st.button("로그아웃"):
         st.session_state.clear()
-        st.experimental_rerun()
+        st.session_state.page = "login"
 
 def checklist_management():
     st.title("체크리스트 관리")
     # 체크리스트 관리 기능 구현
     if st.button("메인 화면으로 돌아가기"):
         st.session_state.page = "main"
-        st.experimental_rerun()
 
 def detailed_analysis():
     st.title("상세 분석")
     # 상세 분석 기능 구현
     if st.button("메인 화면으로 돌아가기"):
         st.session_state.page = "main"
-        st.experimental_rerun()
 
 def notification_settings():
     st.title("알림 설정")
     # 알림 설정 기능 구현
     if st.button("메인 화면으로 돌아가기"):
         st.session_state.page = "main"
-        st.experimental_rerun()
 
 def data_management():
     st.title("데이터 관리")
     # 데이터 관리 기능 구현
     if st.button("메인 화면으로 돌아가기"):
         st.session_state.page = "main"
-        st.experimental_rerun()
 
 def main():
     if 'page' not in st.session_state:
         st.session_state.page = "login"
 
+    # 페이지 전환 로직
     if st.session_state.page == "login":
         login_page()
     elif st.session_state.page == "register":
@@ -203,7 +196,6 @@ def main():
         else:
             st.error("로그인이 필요합니다.")
             st.session_state.page = "login"
-            st.experimental_rerun()
     elif st.session_state.page == "checklist_management":
         checklist_management()
     elif st.session_state.page == "detailed_analysis":
@@ -212,6 +204,11 @@ def main():
         notification_settings()
     elif st.session_state.page == "data_management":
         data_management()
+
+    # 페이지가 변경되었다면 rerun
+    if st.session_state.get('_rerun', False):
+        st.session_state._rerun = False
+        st.rerun()
 
 if __name__ == "__main__":
     main()
