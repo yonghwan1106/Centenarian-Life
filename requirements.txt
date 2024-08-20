@@ -1,6 +1,6 @@
-streamlit==1.22.0
-pandas==1.5.3
-plotly==5.14.1
-bcrypt==4.0.1
-numpy==1.23.5
-setuptools
+streamlit
+pandas
+plotly
+bcrypt
+numpy
+setuptools>=65.5.0
